@@ -143,34 +143,13 @@ to create-terrain
 
   set-parameters
 
-  reset-timer
+  ;;; START - core procedures ;;;;;;;;;;;;;;;;;;;;;;;
 
-  ifelse (elev_algorithm-style = "NetLogo")
-  [
-    set-landform-NetLogo
-  ]
-  [
-    set-landform-Csharp
-  ]
+  setup-elevations
 
-  set-xySlope
+  setup-flows
 
-  set-valleySlope
-
-  ;;; START - flow related procedures ;;;;;;;;;;;;;;;;;;;;;;;
-
-  if (flow_do-fill-sinks)
-  [
-    fill-sinks
-  ]
-
-  set-flow-directions
-
-  introduce-river-flow
-
-  set-flow-accumulations
-
-  ;;; END - flow related procedures ;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; END - core procedures ;;;;;;;;;;;;;;;;;;;;;;;
 
   set-output-stats
 
@@ -333,6 +312,22 @@ to parameters-to-default
   set par_elev_valleySlope                    0.02
 
   set par_flow_riverAccumulationAtStart       1E6
+
+end
+
+to setup-elevations
+
+  ifelse (elev_algorithm-style = "NetLogo")
+  [
+    set-landform-NetLogo
+  ]
+  [
+    set-landform-Csharp
+  ]
+
+  set-xySlope
+
+  set-valleySlope
 
 end
 
@@ -507,6 +502,21 @@ to set-valleySlope
     let xValley (world-width / 2) + elev_valleyAxisInclination * (pycor - (world-height / 2))
     set elevation (1 - elev_valleySlope) * elevation + (elev_valleySlope * (elev_rangeHeight - elev_riftHeight) * abs (xValley - pxcor))
   ]
+
+end
+
+to setup-flows
+
+  if (flow_do-fill-sinks)
+  [
+    fill-sinks
+  ]
+
+  set-flow-directions
+
+  introduce-river-flow
+
+  set-flow-accumulations
 
 end
 
